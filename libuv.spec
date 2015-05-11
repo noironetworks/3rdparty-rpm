@@ -1,11 +1,12 @@
 #we only need major.minor in the SONAME in the stable (even numbered) series
 #this should be changed to %%{version} in unstable (odd numbered) releases
+%{!?buildversion:%define buildversion 1}
 %global sover 1.0
 
 Name: libuv
 Epoch:   1
 Version: 1.5.0
-Release: 1%{?dist}
+Release: %{buildversion}%{?dist}
 Summary: Platform layer for node.js
 
 Group: Development/Tools

@@ -1,7 +1,9 @@
+%{!?buildversion:%define buildversion 1}
+
 Name: rapidjson-devel
 Epoch:   1
 Version: 1.0.1
-Release: 1%{?dist}
+Release: %{buildversion}%{?dist}
 Summary: RapidJSON is a JSON parser and generator for C++.
 
 Group: Development/Tools
@@ -9,6 +11,9 @@ BuildArch: noarch
 License: BSD
 URL: https://github.com/miloyip/rapidjson
 Source0: https://github.com/miloyip/rapidjson/archive/v1.0.1.tar.gz
+
+BuildRequires: cmake
+BuildRequires: doxygen
 
 %description
 RapidJSON is small but complete. It supports both SAX and DOM style
@@ -24,15 +29,19 @@ such as BOOST. It even does not depend on STL.
 %setup -q -n rapidjson-1.0.1
 
 %build
+%cmake .
 
 %install
-mkdir -p $RPM_BUILD_ROOT/%{_includedir}
-cp -R include/rapidjson $RPM_BUILD_ROOT/%{_includedir}
+make install DESTDIR=%{buildroot}
 
 %check
 
 %files
 %{_includedir}/rapidjson
+%{_libdir}/pkgconfig/RapidJSON.pc
+%{_libdir}/cmake/RapidJSON/RapidJSONConfig.cmake
+%{_libdir}/cmake/RapidJSON/RapidJSONConfigVersion.cmake
+%doc %{_docdir}/RapidJSON/
 
 %changelog
 * Tue May 05 2015 Rob Adams <readams@readams.net> - 1.0.1
