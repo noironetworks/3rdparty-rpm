@@ -48,7 +48,7 @@ Static library (.a) version of libuv.
 %setup -q
 
 %build
-./autogen.sh
+[ -f configure ] || ./autogen.sh
 %configure
 make %{?_smp_mflags}
 
