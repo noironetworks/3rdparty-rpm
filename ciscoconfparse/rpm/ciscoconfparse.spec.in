@@ -1,0 +1,38 @@
+Name:		ciscoconfparse
+Version:	@VERSION@
+Release:	@RELEASE@%{?dist}
+Summary:	Python library to parses Cisco IOS-style configurations.
+License:	GPLv3
+URL:		https://github.com/mpenning/ciscoconfparse
+Source:		ciscoconfparse-%{version}.tar.gz
+BuildArch:	noarch
+Requires:	python-ipaddr
+BuildRequires:  python-devel
+BuildRequires:  python-setuptools
+#BuildRequires:  python-setuptools_hg
+
+%description
+Library that parses Cisco IOS-style configurations
+
+%prep
+%setup -qn ciscoconfparse-%{version}
+rm -f requirements.txt
+
+%build
+%{__python2} setup.py build
+
+%install
+%{__python2} setup.py install -O1 --install-data / --skip-build --root %{buildroot}
+%{__rm} -rf %{buildroot}/%{python_sitelib}/version_info
+
+# Remove unused files
+rm -rf %{buildroot}%{python2_sitelib}/ciscoconfparse/tests
+
+%files
+%doc README.rst
+%{python2_sitelib}/ciscoconfparse
+%{python2_sitelib}/ciscoconfparse-%%{version}*.egg-info
+
+%changelog
+* Thu May 26 2016 Thomas Bachman <bachman@noironetworks.com> - 1.0.4-1
+- Initial release 
