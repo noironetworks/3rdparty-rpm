@@ -1,4 +1,5 @@
-%define vmware_dvs neutron-vmware-dvs-agent.service
+%define vmware_dvs neutron-dvs-agent.service
+%define version_py @VERSION_PY@
 
 Name:		neutron-dvs-agent
 Version:	@VERSION@
@@ -7,7 +8,7 @@ Epoch:          2
 Summary:	Neutron agent for VMware DVS
 License:	ASL 2.0
 URL:		https://github.com/Mirantis/vmware-dvs
-Source:		neutron-dvs-agent-%{version}.tar.gz
+Source:		vmware_dvs-%{version}.tar.gz
 BuildArch:	noarch
 BuildRequires:	python2-devel
 BuildRequires:	python-pbr
@@ -25,7 +26,7 @@ Requires(postun): systemd-units
 Neutron agent that provides VMware DVS support
 
 %prep
-%setup -qn neutron-dvs-agent-%{version}
+%setup -qn vmware_dvs-%{version_py}
 rm -f requirements.txt
 
 %build
@@ -33,11 +34,9 @@ rm -f requirements.txt
 
 %install
 %{__python2} setup.py install -O1 --install-data / --skip-build --root %{buildroot}
-install -p -D -m 0644 rpm/%{vmware_dvs} \
-    %{buildroot}/%{_unitdir}/%{vmware_dvs}
-
 # Remove unused files
 rm -rf %{buildroot}%{python2_sitelib}/vmware_dvs/tests/
+install -p -D -m 0644 rpm/%{vmware_dvs} %{buildroot}/%{_unitdir}/%{vmware_dvs}
 
 %pre
 
@@ -76,9 +75,10 @@ rm -rf %{buildroot}%{python2_sitelib}/vmware_dvs/tests/
 %files
 %doc README.rst
 %{python2_sitelib}/vmware_dvs
-%{python2_sitelib}/vmware_dvs-%%{version}*.egg-info
+%{python2_sitelib}/vmware_dvs-%%{version_py}*.egg-info
 %{_bindir}/neutron-dvs-agent
 %{_unitdir}/%{vmware_dvs}
+%config(noreplace) %{_sysconfdir}/neutron/ml2_conf_vmware_dvs.ini
 
 %changelog
 * Mon Jul 18 2016 Thomas Bachman <bachman@noironetworks.com> - 2015.1.0~dev313
