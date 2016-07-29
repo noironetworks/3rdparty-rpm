@@ -1,0 +1,85 @@
+%define vmware_dvs neutron-dvs-agent.service
+%define version_py @VERSION_PY@
+
+Name:		neutron-dvs-agent
+Version:	@VERSION@
+Release:	@RELEASE@%{?dist}
+Epoch:          2
+Summary:	Neutron agent for VMware DVS
+License:	ASL 2.0
+URL:		https://github.com/Mirantis/vmware-dvs
+Source:		vmware_dvs-%{version}.tar.gz
+BuildArch:	noarch
+BuildRequires:	python2-devel
+BuildRequires:	python-pbr
+BuildRequires:	python-setuptools
+Requires:	gawk
+Requires:	openstack-neutron
+Requires:	python-novaclient
+Requires:	python-suds
+Requires:   supervisor
+Requires(post): systemd-units
+Requires(preun): systemd-units
+Requires(postun): systemd-units
+
+%description
+Neutron agent that provides VMware DVS support
+
+%prep
+%setup -qn vmware_dvs-%{version_py}
+rm -f requirements.txt
+
+%build
+%{__python2} setup.py build
+
+%install
+%{__python2} setup.py install -O1 --install-data / --skip-build --root %{buildroot}
+# Remove unused files
+rm -rf %{buildroot}%{python2_sitelib}/vmware_dvs/tests/
+install -p -D -m 0644 rpm/%{vmware_dvs} %{buildroot}/%{_unitdir}/%{vmware_dvs}
+
+%pre
+
+%post
+%if 0%{?systemd_post:1}
+    %systemd_post %{vmware_dvs}
+%else
+    if [ $1 -eq 1 ]; then
+        # Package install, not upgrade
+        /bin/systemctl daemon-reload >dev/null || :
+    fi
+%endif
+
+%preun
+%if 0%{?systemd_preun:1}
+    %systemd_preun %{vmware_dvs}
+%else
+    if [ $1 -eq 0 ] ; then
+        # Package removal, not upgrade
+        /bin/systemctl --no-reload disable %{vmware_dvs} >/dev/null 2>&1 || :
+        /bin/systemctl stop %{vmware_dvs} >/dev/null 2>&1 || :
+    fi
+%endif
+
+%postun
+%if 0%{?systemd_postun_with_restart:1}
+    %systemd_postun_with_restart %{vmware_dvs}
+%else
+    /bin/systemctl daemon-reload >/dev/null 2>&1 || :
+    if [ "$1" -ge "1" ] ; then
+        # Package upgrade, not uninstall
+        /bin/systemctl try-restart %{vmware_dvs} >/dev/null 2>&1 || :
+    fi
+%endif
+
+%files
+%doc README.rst
+%{python2_sitelib}/vmware_dvs
+%{python2_sitelib}/vmware_dvs-%%{version_py}*.egg-info
+%{_bindir}/neutron-dvs-agent
+%{_unitdir}/%{vmware_dvs}
+%config(noreplace) %{_sysconfdir}/neutron/ml2_conf_vmware_dvs.ini
+
+%changelog
+* Mon Jul 18 2016 Thomas Bachman <bachman@noironetworks.com> - 2015.1.0~dev313
+- [Placeholder]
