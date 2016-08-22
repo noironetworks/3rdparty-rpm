@@ -21,7 +21,6 @@ BuildArch:      noarch
 BuildRequires:  git
 BuildRequires:  python2-devel
 BuildRequires:  python-oslo-sphinx
-BuildRequires:  python-pbr
 BuildRequires:  python-setuptools
 BuildRequires:  python-sphinx
 BuildRequires:	systemd-units
@@ -75,12 +74,10 @@ mkdir -p %{buildroot}/%{_sysconfdir}/neutron/conf.d/neutron-cisco-cfg-agent
 %{python2_sitelib}/%{srcname}-%{version_py}-py%{python2_version}.egg-info
 %config(noreplace) %attr(0640, root, neutron) %{_sysconfdir}/neutron/*.ini
 %{_bindir}/neutron-cisco-cfg-agent
-%{_bindir}/networking-cisco-db-manage
 %{_unitdir}/neutron-cisco-cfg-agent.service
 
 %post
 %systemd_post neutron-cisco-cfg-agent.service
-networking-cisco-db-manage --config-file /etc/neutron/neutron.conf upgrade head
 
 %preun
 %systemd_preun neutron-cisco-cfg-agent.service
