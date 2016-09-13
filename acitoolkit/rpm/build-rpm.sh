@@ -15,7 +15,7 @@ mkdir -p $BUILD_DIR/BUILD $BUILD_DIR/SOURCES $BUILD_DIR/SPECS $BUILD_DIR/RPMS $B
 NAME=`python setup.py --name`
 RELEASE=${RELEASE:-1}
 VERSION_PY=`python setup.py --version`
-VERSION=${VERSION_PY/.dev/~dev}
+VERSION=`git describe --tags | tr -d v | cut -d'-' -f1`
 SPEC_FILE=${SPEC_FILE_IN/.in/}
 SPEC_FILE=${SPEC_FILE/rpm\//}
 sed -e "s/@VERSION@/$VERSION/" \
