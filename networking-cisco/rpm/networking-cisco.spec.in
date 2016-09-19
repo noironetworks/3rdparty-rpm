@@ -78,6 +78,7 @@ mkdir -p %{buildroot}/%{_sysconfdir}/neutron/conf.d/neutron-cisco-cfg-agent
 
 %post
 %systemd_post neutron-cisco-cfg-agent.service
+neutron-db-manage --config-file /etc/neutron/neutron.conf upgrade head
 
 %preun
 %systemd_preun neutron-cisco-cfg-agent.service
