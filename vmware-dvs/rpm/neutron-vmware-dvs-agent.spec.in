@@ -86,6 +86,9 @@ install -p -D -m 0644 rpm/%{vmware_dvs} %{buildroot}/%{_unitdir}/%{vmware_dvs}
 %config(noreplace) %{_sysconfdir}/neutron/plugins/ml2/ovsvapp_agent.ini
 
 %changelog
+* Fri Sep 15 2017 Thomas Bachman <bachman@noironetworks.com> - 3.0.0-1
+- Update for Ocata
+
 * Tue Sep 12 2017 Thomas Bachman <bachman@noironetworks.com> - 2.0.0-1
 - Update for Newton
 
