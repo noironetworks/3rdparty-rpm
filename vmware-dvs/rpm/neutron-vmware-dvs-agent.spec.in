@@ -8,7 +8,7 @@ Epoch:          3
 Summary:	Neutron agent for VMware DVS
 License:	ASL 2.0
 URL:		https://github.com/Mirantis/vmware-dvs
-Source:		vmware_dvs-%{version}.tar.gz
+Source:		networking-vsphere-%{version}.tar.gz
 BuildArch:	noarch
 BuildRequires:	python2-devel
 BuildRequires:	python-pbr
@@ -26,7 +26,7 @@ Requires(postun): systemd-units
 Neutron agent that provides VMware DVS support
 
 %prep
-%setup -qn vmware_dvs-%{version_py}
+%setup -qn networking-vsphere-%{version_py}
 rm -f requirements.txt
 
 %build
@@ -74,12 +74,20 @@ install -p -D -m 0644 rpm/%{vmware_dvs} %{buildroot}/%{_unitdir}/%{vmware_dvs}
 
 %files
 %doc README.rst
-%{python2_sitelib}/vmware_dvs
-%{python2_sitelib}/vmware_dvs-%%{version_py}*.egg-info
+%{python2_sitelib}/networking_vsphere
+%{python2_sitelib}/networking_vsphere-%%{version_py}*.egg-info
 %{_bindir}/neutron-dvs-agent
+%{_bindir}/neutron-ovsvapp-agent
+%{_bindir}/neutron-ovsvapp-agent-monitor
+%{_bindir}/neutron-ovsvapp-db-manage
+%{_var}/tmp/nova.patch
 %{_unitdir}/%{vmware_dvs}
 %config(noreplace) %{_sysconfdir}/neutron/ml2_conf_vmware_dvs.ini
+%config(noreplace) %{_sysconfdir}/neutron/plugins/ml2/ovsvapp_agent.ini
 
 %changelog
-* Mon Jul 18 2016 Thomas Bachman <bachman@noironetworks.com> - 2015.1.0~dev313
-- [Placeholder]
+* Tue Sep 12 2017 Thomas Bachman <bachman@noironetworks.com> - 2.0.0-1
+- Update for Newton
+
+* Mon Jul 18 2016 Thomas Bachman <bachman@noironetworks.com> - 1.0.10-1
+- Update for Mitaka
