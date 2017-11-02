@@ -2,14 +2,14 @@
 
 Name: rapidjson-devel
 Epoch:   1
-Version: 1.0.2
+Version: 1.1.0
 Release: %{buildversion}%{?dist}
 Summary: RapidJSON is a JSON parser and generator for C++.
 
 Group: Development/Tools
 License: BSD
 URL: https://github.com/miloyip/rapidjson
-Source0: https://github.com/miloyip/rapidjson/archive/v1.0.2.tar.gz
+Source0: https://github.com/miloyip/rapidjson/archive/v1.1.0.tar.gz
 
 BuildRequires: cmake
 BuildRequires: doxygen
@@ -25,7 +25,7 @@ RapidJSON is self-contained. It does not depend on external libraries
 such as BOOST. It even does not depend on STL.
 
 %prep
-%setup -q -n rapidjson-1.0.2
+%setup -q -n rapidjson-1.1.0
 
 %build
 %cmake .
@@ -43,6 +43,8 @@ make install DESTDIR=%{buildroot}
 %doc %{_docdir}/RapidJSON/
 
 %changelog
+* Thu Nov 02 2017 Rob Adams <readams@readams.net> - 1.1.0
+- Upgrade to 1.1.0
 * Tue May 19 2015 Rob Adams <readams@readams.net> - 1.0.2
 - Upgrade to 1.0.2
 * Tue May 05 2015 Rob Adams <readams@readams.net> - 1.0.1
