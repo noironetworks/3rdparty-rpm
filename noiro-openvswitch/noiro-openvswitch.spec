@@ -115,6 +115,20 @@ Requires: python python-twisted-core python-twisted-web
 Utilities that are useful to diagnose performance and connectivity
 issues in Open vSwitch setup.
 
+%package lib
+Summary: Open vSwitch OpenFlow library
+License: ASL 2.0
+
+%description lib
+This provides dynamic libraries for using OpenFlow with OVS
+
+%package otherlib
+Summary: Open vSwitch other libraries
+License: ASL 2.0
+
+%description otherlib
+This provides libraries other than the openflow libraries
+
 %package devel
 Summary: Open vSwitch OpenFlow development package (library, headers)
 License: ASL 2.0
@@ -174,7 +188,7 @@ Docker network plugins for OVN.
 %setup -q -n openvswitch-%{version}
 
 %build
-%configure \
+%configure --enable-shared \
 %if %{with libcapng}
 	--enable-libcapng \
 %else
@@ -238,6 +252,7 @@ rm -f $RPM_BUILD_ROOT%{_bindir}/ovs-parse-backtrace \
         $RPM_BUILD_ROOT%{_sbindir}/ovs-vlan-bug-workaround \
         $RPM_BUILD_ROOT%{_mandir}/man8/ovs-vlan-bug-workaround.8
 
+# Fix installed OVS headers
 copy_headers() {
     src=$1
     dst=$RPM_BUILD_ROOT/$2
@@ -431,6 +446,16 @@ fi
 %{_mandir}/man8/ovs-tcpdump.8*
 %{_mandir}/man1/ovs-tcpundump.1*
 %{python_sitelib}/ovstest
+
+%files lib
+%{_libdir}/libnoiro_openvswitch*.so*
+%{_libdir}/libnoiro_ofproto*.so*
+%{_libdir}/libnoiro_sflow*.so*
+
+%files otherlib
+%{_libdir}/libvtep*.so*
+%{_libdir}/libovn*.so*
+%{_libdir}/libovsdb*.so*
 
 %files devel
 %{_libdir}/*.a
