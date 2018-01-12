@@ -11,7 +11,7 @@ index 49010b3..2c254f8 100644
  noinst_PROGRAMS =
  noinst_SCRIPTS =
 diff --git a/lib/automake.mk b/lib/automake.mk
-index e4cfc97..cb7565b 100644
+index e4cfc97..b466196 100644
 --- a/lib/automake.mk
 +++ b/lib/automake.mk
 @@ -5,7 +5,10 @@
@@ -35,6 +35,20 @@ index e4cfc97..cb7565b 100644
          -version-info $(LT_CURRENT):$(LT_REVISION):$(LT_AGE) \
          -Wl,--version-script=$(top_builddir)/lib/libopenvswitch.sym \
          $(AM_LDFLAGS)
+@@ -326,8 +329,11 @@ nodist_lib_libopenvswitch_la_SOURCES = \
+ 	lib/vswitch-idl.h
+ CLEANFILES += $(nodist_lib_libopenvswitch_la_SOURCES)
+ 
+-lib_LTLIBRARIES += lib/libsflow.la
+-lib_libsflow_la_LDFLAGS = \
++noinst_LTLIBRARIES += lib/libsflow.la
++lib_LTLIBRARIES += lib/libnoiro_sflow.la
++lib_libnoiro_sflow_la_SOURCES =
++lib_libnoiro_sflow_la_LIBADD = lib/libsflow.la
++lib_libnoiro_sflow_la_LDFLAGS = \
+         -version-info $(LT_CURRENT):$(LT_REVISION):$(LT_AGE) \
+         -Wl,--version-script=$(top_builddir)/lib/libsflow.sym \
+         $(AM_LDFLAGS)
 diff --git a/lib/libopenvswitch.pc.in b/lib/libopenvswitch.pc.in
 index 2a3f2ca..5a0eca4 100644
 --- a/lib/libopenvswitch.pc.in
@@ -45,6 +59,22 @@ index 2a3f2ca..5a0eca4 100644
  Version: @VERSION@
 -Libs: -L${libdir} -lopenvswitch
 +Libs: -L${libdir} -lnoiro_openvswitch
+ Libs.private: @LIBS@
+ Cflags: -I${includedir}/openvswitch
+diff --git a/lib/libsflow.pc.in b/lib/libsflow.pc.in
+index e70a2b7..6f73164 100644
+--- a/lib/libsflow.pc.in
++++ b/lib/libsflow.pc.in
+@@ -3,9 +3,9 @@ exec_prefix=@exec_prefix@
+ libdir=@libdir@
+ includedir=@includedir@
+ 
+-Name: libofproto
++Name: libsflow
+ Description: sFlow library of Open vSwitch
+ Version: @VERSION@
+-Libs: -L${libdir} -lsflow
++Libs: -L${libdir} -lnoiro_sflow
  Libs.private: @LIBS@
  Cflags: -I${includedir}/openvswitch
 diff --git a/ofproto/automake.mk b/ofproto/automake.mk
