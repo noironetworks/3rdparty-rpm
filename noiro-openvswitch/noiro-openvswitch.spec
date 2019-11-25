@@ -201,8 +201,7 @@ Docker network plugins for OVN.
 	--with-pkidir=%{_sharedstatedir}/openvswitch/pki
 
 make %{?_smp_mflags}
-cd selinux
-make -f %{_datadir}/selinux/devel/Makefile
+make selinux-policy
 
 %install
 rm -rf $RPM_BUILD_ROOT
@@ -213,12 +212,15 @@ install -d -m 0755 $RPM_BUILD_ROOT%{_sysconfdir}/openvswitch
 install -p -D -m 0644 \
         rhel/usr_share_openvswitch_scripts_systemd_sysconfig.template \
         $RPM_BUILD_ROOT/%{_sysconfdir}/sysconfig/openvswitch
-for service in openvswitch ovsdb-server ovs-vswitchd \
+for service in openvswitch ovsdb-server \
 		ovn-controller ovn-controller-vtep ovn-northd; do
 	install -p -D -m 0644 \
 			rhel/usr_lib_systemd_system_${service}.service \
 			$RPM_BUILD_ROOT%{_unitdir}/${service}.service
 done
+install -p -D -m 0644 \
+		rhel/usr_lib_systemd_system_ovs-vswitchd.service.in \
+		$RPM_BUILD_ROOT%{_unitdir}/ovs-vswitchd.service
 install -m 0755 rhel/etc_init.d_openvswitch \
         $RPM_BUILD_ROOT%{_datadir}/openvswitch/scripts/openvswitch.init
 
@@ -251,6 +253,10 @@ install -p -m 644 -D selinux/openvswitch-custom.pp \
 rm -f $RPM_BUILD_ROOT%{_bindir}/ovs-parse-backtrace \
         $RPM_BUILD_ROOT%{_sbindir}/ovs-vlan-bug-workaround \
         $RPM_BUILD_ROOT%{_mandir}/man8/ovs-vlan-bug-workaround.8
+
+install -d -m 0755 $RPM_BUILD_ROOT%{_rundir}/openvswitch
+install -d -m 0755 $RPM_BUILD_ROOT%{_localstatedir}/log/openvswitch
+install -d -m 0755 $RPM_BUILD_ROOT/var/lib/openvswitch
 
 # Fix installed OVS headers
 copy_headers() {
@@ -430,7 +436,6 @@ fi
 
 %files -n python-openvswitch
 %{python_sitelib}/ovs
-%doc COPYING
 
 %files test
 %{_bindir}/ovs-test
@@ -439,9 +444,6 @@ fi
 %{_bindir}/ovs-pcap
 %{_bindir}/ovs-tcpdump
 %{_bindir}/ovs-tcpundump
-%{_mandir}/man8/ovs-test.8*
-%{_mandir}/man8/ovs-vlan-test.8*
-%{_mandir}/man8/ovs-l3ping.8*
 %{_mandir}/man1/ovs-pcap.1*
 %{_mandir}/man8/ovs-tcpdump.8*
 %{_mandir}/man1/ovs-tcpundump.1*
@@ -485,6 +487,9 @@ fi
 %{_datadir}/openvswitch/scripts/ovs-save
 %{_datadir}/openvswitch/scripts/ovs-vtep
 %{_datadir}/openvswitch/scripts/ovs-ctl
+%{_datadir}/openvswitch/scripts/ovs-kmod-ctl
+%{_datadir}/openvswitch/scripts/ovs-monitor-ipsec
+%{_datadir}/openvswitch/scripts/ovndb-servers.ocf
 %config %{_datadir}/openvswitch/vswitch.ovsschema
 %config %{_datadir}/openvswitch/vtep.ovsschema
 %{_bindir}/ovs-appctl
@@ -505,21 +510,25 @@ fi
 %{_mandir}/man1/ovsdb-server.1*
 %{_mandir}/man1/ovsdb-tool.1*
 %{_mandir}/man5/ovs-vswitchd.conf.db.5*
+%{_mandir}/man5/ovsdb-server.5*
 %{_mandir}/man5/vtep.5*
+%{_mandir}/man7/ovs-actions.7*
+%{_mandir}/man7/ovs-fields.7*
 %{_mandir}/man8/vtep-ctl.8*
 %{_mandir}/man8/ovs-appctl.8*
 %{_mandir}/man8/ovs-bugtool.8*
 %{_mandir}/man8/ovs-ctl.8*
 %{_mandir}/man8/ovs-dpctl.8*
 %{_mandir}/man8/ovs-dpctl-top.8*
+%{_mandir}/man8/ovs-kmod-ctl.8*
 %{_mandir}/man8/ovs-ofctl.8*
 %{_mandir}/man8/ovs-pki.8*
 %{_mandir}/man8/ovs-vsctl.8*
 %{_mandir}/man8/ovs-vswitchd.8*
 %{_mandir}/man8/ovs-parse-backtrace.8*
 %{_mandir}/man8/ovs-testcontroller.8*
-%doc COPYING DESIGN.md INSTALL.SSL.md NOTICE README.md WHY-OVS.md
-%doc FAQ.md NEWS INSTALL.DPDK.md rhel/README.RHEL
+%{_mandir}/man8/ovs-l3ping.8*
+%doc NOTICE README.rst NEWS rhel/README.RHEL.rst
 /var/lib/openvswitch
 /var/log/openvswitch
 %ghost %attr(755,root,root) %{_rundir}/openvswitch
@@ -532,10 +541,12 @@ fi
 %{_bindir}/ovn-nbctl
 %{_bindir}/ovn-sbctl
 %{_bindir}/ovn-trace
+%{_bindir}/ovn-detrace
 %{_datadir}/openvswitch/scripts/ovn-ctl
 %{_datadir}/openvswitch/scripts/ovn-bugtool-nbctl-show
 %{_datadir}/openvswitch/scripts/ovn-bugtool-sbctl-lflow-list
 %{_datadir}/openvswitch/scripts/ovn-bugtool-sbctl-show
+%{_mandir}/man1/ovn-detrace.1*
 %{_mandir}/man8/ovn-ctl.8*
 %{_mandir}/man8/ovn-nbctl.8*
 %{_mandir}/man8/ovn-trace.8*
