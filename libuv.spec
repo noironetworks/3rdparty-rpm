@@ -5,7 +5,7 @@
 
 Name: libuv
 Epoch:   1
-Version: 1.7.5
+Version: 1.20.2
 Release: %{buildversion}%{?dist}
 Summary: Platform layer for node.js
 
