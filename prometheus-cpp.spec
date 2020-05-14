@@ -14,13 +14,11 @@ This library aims to enable Metrics-Driven Development for C++ services. It impl
 We offer the possibility for metrics to be collected by Prometheus, but other push/pull collections can be added as plugins.
 
 %prep
-echo "the value of mymacro is --%{cmake}--"
 %setup -q -n prometheus-cpp-%{version}
 
 %package lib
 Summary: library
 Requires: %{name}-lib = %{version}-%{release}
-
 
 %package devel
 Summary: devel
@@ -48,8 +46,8 @@ make install DESTDIR=%{buildroot}
 %{_includedir}/prometheus/*
 
 %changelog
-* Sat Apr 18 2020 Adam Miller <bashokba@cisco.com>
-- Promtheus changes                                                                                                                              
+* Sat Apr 18 2020 Bhavana babu <bashokba@cisco.com>
+- Prometheus-spec changes                                                                                                                              
 
 
 
