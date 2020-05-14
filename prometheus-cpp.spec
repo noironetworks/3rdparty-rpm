@@ -33,7 +33,7 @@ Development libraries for prometheus
 Development libraries for prometheus
 
 %build
-cmake3 . -DCMAKE_INSTALL_PREFIX:PATH=/usr
+cmake3 . -DCMAKE_INSTALL_PREFIX:PATH=/usr -DBUILD_SHARED_LIBS=ON
 
 %install
 make -j4
