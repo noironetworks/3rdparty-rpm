@@ -9,10 +9,10 @@ License:  Apache 2.0
 URL:      https://github.com/datacenter/acitoolkit
 Source:   %{name}-%{version}.tar.gz
 BuildArch:     noarch
-BuildRequires: python-setuptools
-Requires:      python-requests
+BuildRequires: python2-setuptools
+Requires:      python2-requests
 Requires:      python-websocket-client
-Requires:      python-tabulate
+Requires:      python2-tabulate
 
 %description
 The ACI Toolkit is a set of python libraries that allow basic configuration of the Cisco APIC controller
