@@ -31,7 +31,6 @@ Development libraries for prometheus
 Development libraries for prometheus
 
 %build
-. /opt/rh/devtoolset-7/enable
 cmake3 -B_build -DCPACK_GENERATOR=RPM -DCMAKE_INSTALL_PREFIX:PATH=/usr -DBUILD_SHARED_LIBS=ON
 cmake3 --build _build --target package --parallel $(nproc)
 
