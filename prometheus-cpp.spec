@@ -19,12 +19,10 @@ We offer the possibility for metrics to be collected by Prometheus, but other pu
 %package lib
 Summary: library
 Requires: %{name}-lib = %{version}-%{release}
-BuildRequires: devtoolset-7-toolchain
 
 %package devel
 Summary: devel
 Requires: %{name}-devel = %{version}-%{release}
-BuildRequires: devtoolset-7-toolchain
 
 %description devel
 Development libraries for prometheus
@@ -34,13 +32,10 @@ Development libraries for prometheus
 
 %build
 . /opt/rh/devtoolset-7/enable
-%define __strip /opt/rh/devtoolset-7/root/usr/bin/strip
 cmake3 -B_build -DCPACK_GENERATOR=RPM -DCMAKE_INSTALL_PREFIX:PATH=/usr -DBUILD_SHARED_LIBS=ON
 cmake3 --build _build --target package --parallel $(nproc)
 
 %install
-. /opt/rh/devtoolset-7/enable
-%define __strip /opt/rh/devtoolset-7/root/usr/bin/strip
 cd _build
 make -j4
 make install DESTDIR=%{buildroot}
