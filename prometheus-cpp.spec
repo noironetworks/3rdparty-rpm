@@ -19,10 +19,12 @@ We offer the possibility for metrics to be collected by Prometheus, but other pu
 %package lib
 Summary: library
 Requires: %{name}-lib = %{version}-%{release}
+BuildRequires: cmake3
 
 %package devel
 Summary: devel
 Requires: %{name}-devel = %{version}-%{release}
+BuildRequires: cmake3
 
 %description devel
 Development libraries for prometheus
