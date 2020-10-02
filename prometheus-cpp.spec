@@ -15,6 +15,8 @@ We offer the possibility for metrics to be collected by Prometheus, but other pu
 
 %prep
 %setup -q -n prometheus-cpp-%{version}
+wget https://github.com/Kitware/CMake/releases/download/v3.17.0/cmake-3.17.0-Linux-x86_64.sh
+sh cmake-3.17.0-Linux-x86_64.sh -- --skip-license --prefix=/root
 
 %package lib
 Summary: library
@@ -31,8 +33,8 @@ Development libraries for prometheus
 Development libraries for prometheus
 
 %build
-cmake3 --build _build -DCPACK_GENERATOR=RPM -DCMAKE_INSTALL_PREFIX:PATH=/usr -DBUILD_SHARED_LIBS=ON
-cmake3 --build _build --target package --parallel $(nproc)
+cmake --build _build -DCPACK_GENERATOR=RPM -DCMAKE_INSTALL_PREFIX:PATH=/usr -DBUILD_SHARED_LIBS=ON
+cmake --build _build --target package --parallel $(nproc)
 
 %install
 cd _build
