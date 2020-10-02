@@ -21,10 +21,12 @@ sh cmake-3.17.0-Linux-x86_64.sh -- --skip-license --prefix=/root
 %package lib
 Summary: library
 Requires: %{name}-lib = %{version}-%{release}
+BuildRequires: wget
 
 %package devel
 Summary: devel
 Requires: %{name}-devel = %{version}-%{release}
+BuildRequires: wget
 
 %description devel
 Development libraries for prometheus
