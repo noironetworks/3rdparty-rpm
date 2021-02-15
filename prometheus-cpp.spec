@@ -1,7 +1,7 @@
 %{!?buildversion:%define buildversion 1}
 
 Name: prometheus-cpp
-Version: 0.9.0
+Version: 0.12.1
 Release: %{buildversion}%{?dist}
 Summary: Prometheus-cpp
 
