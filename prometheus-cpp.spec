@@ -41,7 +41,7 @@ Development libraries for prometheus
 . /opt/rh/devtoolset-8/enable
 %define __strip /opt/rh/devtoolset-8/root/usr/bin/strip
 %endif
-cmake3 -B_build -DCPACK_GENERATOR=RPM -DCMAKE_INSTALL_PREFIX:PATH=/usr -DBUILD_SHARED_LIBS=ON
+cmake3 -B_build -DCPACK_GENERATOR=RPM -DCMAKE_INSTALL_PREFIX:PATH=/usr -DBUILD_SHARED_LIBS=ON -DENABLE_PUSH=OFF
 cmake3 --build _build --target package --parallel $(nproc)
 
 %install
