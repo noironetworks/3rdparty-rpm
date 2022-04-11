@@ -18,6 +18,7 @@ We offer the possibility for metrics to be collected by Prometheus, but other pu
 %prep
 %setup -q -n prometheus-cpp-%{version}
 export https_proxy=http://proxy.esl.cisco.com
+export http_proxy=http://proxy.esl.cisco.com
 wget https://github.com/Kitware/CMake/releases/download/v3.17.0/cmake-3.17.0-Linux-x86_64.sh
 sh cmake-3.17.0-Linux-x86_64.sh -- --skip-license --prefix=/root
 
