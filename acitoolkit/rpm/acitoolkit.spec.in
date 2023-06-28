@@ -1,7 +1,7 @@
 %define version_py @VERSION_PY@
 %global srcname acitoolkit
 
-Name:     %{srcname}
+Name:     python3-%{srcname}
 Version:  @VERSION@
 Release:  @RELEASE@%{?dist}
 Summary:  Python libraries for configuration of the Cisco APIC controller
