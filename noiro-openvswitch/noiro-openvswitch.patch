@@ -118,8 +118,8 @@ index d6ab517..4f57201 100644
  	tests/test-netlink-conntrack.c
  endif
  
--tests_ovstest_LDADD = lib/libopenvswitch.la ovn/lib/libovn.la
-+tests_ovstest_LDADD = lib/libnoiro_openvswitch.la ovn/lib/libovn.la
+-tests_ovstest_LDADD = lib/libopenvswitch.la
++tests_ovstest_LDADD = lib/libnoiro_openvswitch.la
  
  noinst_PROGRAMS += tests/test-stream
  tests_test_stream_SOURCES = tests/test-stream.c
