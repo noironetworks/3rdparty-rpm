@@ -43,7 +43,7 @@ Name: noiro-openvswitch
 Summary: Open vSwitch
 Group: System Environment/Daemons
 URL: http://www.openvswitch.org/
-Version: 2.12.0
+Version: 2.13.0
 
 # Nearly all of openvswitch is ASL 2.0.  The bugtool is LGPLv2+, and the
 # lib/sflow*.[ch] files are SISSL
