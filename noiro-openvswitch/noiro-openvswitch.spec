@@ -54,7 +54,7 @@ Source: http://openvswitch.org/releases/openvswitch-%{version}.tar.gz
 
 BuildRequires: autoconf automake libtool
 BuildRequires: systemd-units openssl openssl-devel
-BuildRequires: python python3-twisted-core python3-zope-interface python3-six
+BuildRequires: python python3-twisted python3-zope-interface python3-six
 BuildRequires: desktop-file-utils
 BuildRequires: groff graphviz
 BuildRequires: checkpolicy, selinux-policy-devel
@@ -109,7 +109,7 @@ Summary: Open vSwitch testing utilities
 License: ASL 2.0
 BuildArch: noarch
 Requires: python-openvswitch = %{version}-%{release}
-Requires: python python3-twisted-core python3-twisted-web
+Requires: python python3-twisted python3-twisted-web
 
 %description test
 Utilities that are useful to diagnose performance and connectivity
