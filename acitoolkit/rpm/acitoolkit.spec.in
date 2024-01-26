@@ -1,7 +1,7 @@
 %define version_py @VERSION_PY@
 %global srcname acitoolkit
 
-Name:     python3-%{srcname}
+Name:     %{srcname}
 Version:  @VERSION@
 Release:  @RELEASE@%{?dist}
 Summary:  Python libraries for configuration of the Cisco APIC controller
@@ -10,10 +10,10 @@ License:  Apache 2.0
 URL:      https://github.com/datacenter/%{srcname}
 Source:   %{srcname}-%{version}.tar.gz
 BuildArch:     noarch
-BuildRequires: python3-setuptools
-Requires:      python3-requests
-Requires:      python3-websocket-client
-Requires:      python3-tabulate
+BuildRequires: python2-setuptools
+Requires:      python2-requests
+Requires:      python-websocket-client
+Requires:      python2-tabulate
 
 %description
 The ACI Toolkit is a set of python libraries that allow basic configuration of the Cisco APIC controller
@@ -22,17 +22,17 @@ The ACI Toolkit is a set of python libraries that allow basic configuration of t
 %setup -qn %{srcname}-%{version_py}
 
 %build
-%{__python3} setup.py build
+%{__python2} setup.py build
 
 %install
-%{__python3} setup.py install -O1 --skip-build --root %{buildroot}
+%{__python2} setup.py install -O1 --skip-build --root %{buildroot}
 
 %clean
 rm -rf %{buildroot}
 
 %files
-%{python3_sitelib}/%{srcname}/
-%{python3_sitelib}/%{srcname}*.egg-info
+%{python2_sitelib}/%{srcname}/
+%{python2_sitelib}/%{srcname}*.egg-info
 
 %changelog
 * Thu Jul 28 2016 Amit Bose <bose@noironetworks.com> 0.3.2-1
