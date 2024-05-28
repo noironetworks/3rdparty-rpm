@@ -24,11 +24,13 @@ also optionally supports SSE2/SSE4.1 for acceleration.
 RapidJSON is self-contained. It does not depend on external libraries
 such as BOOST. It even does not depend on STL.
 
+%global debug_package %{nil}
+
 %prep
 %setup -q -n rapidjson-1.1.0
 
 %build
-%cmake .
+%cmake -DCMAKE_CXX_FLAGS="-Wno-error=class-memaccess -Wno-error=implicit-fallthrough -no-pie -fPIC" .
 
 %install
 make install DESTDIR=%{buildroot}
