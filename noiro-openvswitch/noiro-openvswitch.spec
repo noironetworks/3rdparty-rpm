@@ -21,7 +21,7 @@
 # testing out of tree kernel modules the appropriate openvswitch-kmod
 # package should be installed first.
 
-#%define kernel 2.6.40.4-5.fc15.x86_64
+#%%define kernel 2.6.40.4-5.fc15.x86_64
 %{!?buildversion:%define buildversion 1}
 
 # If libcap-ng isn't available and there is no need for running OVS
@@ -54,7 +54,7 @@ Source: http://openvswitch.org/releases/openvswitch-%{version}.tar.gz
 
 BuildRequires: autoconf automake libtool
 BuildRequires: systemd-units openssl openssl-devel
-BuildRequires: python python-twisted-core python-zope-interface python-six
+BuildRequires: python3 python3-six
 BuildRequires: desktop-file-utils
 BuildRequires: groff graphviz
 BuildRequires: checkpolicy, selinux-policy-devel
@@ -94,22 +94,22 @@ Requires: selinux-policy-targeted
 %description selinux-policy
 Tailored Open vSwitch SELinux policy
 
-%package -n python-openvswitch
+%package -n python3-openvswitch
 Summary: Open vSwitch python bindings
 License: ASL 2.0
 BuildArch: noarch
-Requires: python
-Requires: python-six
+Requires: python3
+Requires: python3-six
 
-%description -n python-openvswitch
+%description -n python3-openvswitch
 Python bindings for the Open vSwitch database
 
 %package test
 Summary: Open vSwitch testing utilities
 License: ASL 2.0
 BuildArch: noarch
-Requires: python-openvswitch = %{version}-%{release}
-Requires: python python-twisted-core python-twisted-web
+Requires: python3-openvswitch = %{version}-%{release}
+Requires: python3
 
 %description test
 Utilities that are useful to diagnose performance and connectivity
@@ -179,7 +179,7 @@ Utilities that are use to diagnose and manage the OVN components.
 %package ovn-docker
 Summary: Open vSwitch - Open Virtual Network support
 License: ASL 2.0
-Requires: openvswitch openvswitch-ovn-common python-openvswitch
+Requires: openvswitch openvswitch-ovn-common python3-openvswitch
 
 %description ovn-docker
 Docker network plugins for OVN.
@@ -190,15 +190,15 @@ Docker network plugins for OVN.
 %build
 %configure --enable-shared \
 %if %{with libcapng}
-	--enable-libcapng \
+        --enable-libcapng \
 %else
-	--disable-libcapng \
+        --disable-libcapng \
 %endif
 %if %{with dpdk}
-	--with-dpdk=$(dirname %{_datadir}/dpdk/*/.config) \
+        --with-dpdk=$(dirname %{_datadir}/dpdk/*/.config) \
 %endif
-	--enable-ssl \
-	--with-pkidir=%{_sharedstatedir}/openvswitch/pki
+        --enable-ssl \
+        --with-pkidir=%{_sharedstatedir}/openvswitch/pki
 
 make %{?_smp_mflags}
 make selinux-policy
@@ -213,14 +213,14 @@ install -p -D -m 0644 \
         rhel/usr_share_openvswitch_scripts_systemd_sysconfig.template \
         $RPM_BUILD_ROOT/%{_sysconfdir}/sysconfig/openvswitch
 for service in openvswitch ovsdb-server \
-		ovn-controller ovn-controller-vtep ovn-northd; do
-	install -p -D -m 0644 \
-			rhel/usr_lib_systemd_system_${service}.service \
-			$RPM_BUILD_ROOT%{_unitdir}/${service}.service
+        ovn-controller ovn-controller-vtep ovn-northd; do
+        install -p -D -m 0644 \
+                rhel/usr_lib_systemd_system_${service}.service \
+                $RPM_BUILD_ROOT%{_unitdir}/${service}.service
 done
 install -p -D -m 0644 \
-		rhel/usr_lib_systemd_system_ovs-vswitchd.service.in \
-		$RPM_BUILD_ROOT%{_unitdir}/ovs-vswitchd.service
+        rhel/usr_lib_systemd_system_ovs-vswitchd.service.in \
+        $RPM_BUILD_ROOT%{_unitdir}/ovs-vswitchd.service
 install -m 0755 rhel/etc_init.d_openvswitch \
         $RPM_BUILD_ROOT%{_datadir}/openvswitch/scripts/openvswitch.init
 
@@ -236,9 +236,9 @@ install -p -m 0755 rhel/etc_sysconfig_network-scripts_ifdown-ovs \
 install -p -m 0755 rhel/etc_sysconfig_network-scripts_ifup-ovs \
         $RPM_BUILD_ROOT/%{_sysconfdir}/sysconfig/network-scripts/ifup-ovs
 
-install -d -m 0755 $RPM_BUILD_ROOT%{python_sitelib}
+install -d -m 0755 $RPM_BUILD_ROOT%{python3_sitelib}
 mv $RPM_BUILD_ROOT/%{_datadir}/openvswitch/python/* \
-   $RPM_BUILD_ROOT%{python_sitelib}
+   $RPM_BUILD_ROOT%{python3_sitelib}
 rmdir $RPM_BUILD_ROOT/%{_datadir}/openvswitch/python/
 
 install -d -m 0755 $RPM_BUILD_ROOT/%{_sharedstatedir}/openvswitch
@@ -434,20 +434,20 @@ fi
 %defattr(-,root,root)
 %{_datadir}/selinux/packages/%{name}/openvswitch-custom.pp
 
-%files -n python-openvswitch
-%{python_sitelib}/ovs
+%files -n python3-openvswitch
+%{python3_sitelib}/ovs
 
 %files test
-%{_bindir}/ovs-test
-%{_bindir}/ovs-vlan-test
-%{_bindir}/ovs-l3ping
+#%%{_bindir}/ovs-test
+#%%{_bindir}/ovs-vlan-test
+#%%{_bindir}/ovs-l3ping
 %{_bindir}/ovs-pcap
 %{_bindir}/ovs-tcpdump
 %{_bindir}/ovs-tcpundump
 %{_mandir}/man1/ovs-pcap.1*
 %{_mandir}/man8/ovs-tcpdump.8*
 %{_mandir}/man1/ovs-tcpundump.1*
-%{python_sitelib}/ovstest
+%{python3_sitelib}/ovstest
 
 %files lib
 %{_libdir}/libnoiro_openvswitch*.so*
@@ -480,8 +480,8 @@ fi
 %{_datadir}/openvswitch/scripts/openvswitch.init
 %{_sysconfdir}/sysconfig/network-scripts/ifup-ovs
 %{_sysconfdir}/sysconfig/network-scripts/ifdown-ovs
-%{_datadir}/openvswitch/bugtool-plugins/
-%{_datadir}/openvswitch/scripts/ovs-bugtool-*
+#%%{_datadir}/openvswitch/bugtool-plugins/
+#%%{_datadir}/openvswitch/scripts/ovs-bugtool-*
 %{_datadir}/openvswitch/scripts/ovs-check-dead-ifs
 %{_datadir}/openvswitch/scripts/ovs-lib
 %{_datadir}/openvswitch/scripts/ovs-save
@@ -495,7 +495,7 @@ fi
 %{_bindir}/ovs-appctl
 %{_bindir}/ovs-docker
 %{_bindir}/ovs-dpctl
-%{_bindir}/ovs-dpctl-top
+#%%{_bindir}/ovs-dpctl-top
 %{_bindir}/ovs-ofctl
 %{_bindir}/ovs-vsctl
 %{_bindir}/ovsdb-client
@@ -503,7 +503,7 @@ fi
 %{_bindir}/ovs-testcontroller
 %{_bindir}/ovs-pki
 %{_bindir}/vtep-ctl
-%{_sbindir}/ovs-bugtool
+#%%{_sbindir}/ovs-bugtool
 %{_sbindir}/ovs-vswitchd
 %{_sbindir}/ovsdb-server
 %{_mandir}/man1/ovsdb-client.1*
@@ -516,7 +516,7 @@ fi
 %{_mandir}/man7/ovs-fields.7*
 %{_mandir}/man8/vtep-ctl.8*
 %{_mandir}/man8/ovs-appctl.8*
-%{_mandir}/man8/ovs-bugtool.8*
+#%%{_mandir}/man8/ovs-bugtool.8*
 %{_mandir}/man8/ovs-ctl.8*
 %{_mandir}/man8/ovs-dpctl.8*
 %{_mandir}/man8/ovs-dpctl-top.8*
@@ -543,9 +543,9 @@ fi
 %{_bindir}/ovn-trace
 %{_bindir}/ovn-detrace
 %{_datadir}/openvswitch/scripts/ovn-ctl
-%{_datadir}/openvswitch/scripts/ovn-bugtool-nbctl-show
-%{_datadir}/openvswitch/scripts/ovn-bugtool-sbctl-lflow-list
-%{_datadir}/openvswitch/scripts/ovn-bugtool-sbctl-show
+#%%{_datadir}/openvswitch/scripts/ovn-bugtool-nbctl-show
+#%%{_datadir}/openvswitch/scripts/ovn-bugtool-sbctl-lflow-list
+#%%{_datadir}/openvswitch/scripts/ovn-bugtool-sbctl-show
 %{_mandir}/man1/ovn-detrace.1*
 %{_mandir}/man8/ovn-ctl.8*
 %{_mandir}/man8/ovn-nbctl.8*

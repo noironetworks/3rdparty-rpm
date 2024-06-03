@@ -13,8 +13,7 @@ Group: Development/Tools
 # the licensing breakdown is described in detail in the LICENSE file
 License: MIT and BSD and ISC
 URL: http://nodejs.org/
-#Source0: http://libuv.org/dist/v%{version}/%{name}-v%{version}.tar.gz
-Source0: https://github.com/%{name}/%{name}/archive/v%{version}.tar.gz
+Source0: https://https://dist.libuv.org/dist/v%{version}/%{name}-v%{version}.tar.gz
 
 BuildRequires: libtool
 Requires(post): /sbin/ldconfig
