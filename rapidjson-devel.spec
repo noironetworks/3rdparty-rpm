@@ -33,7 +33,7 @@ such as BOOST. It even does not depend on STL.
 %cmake -DCMAKE_CXX_FLAGS="-Wno-error=class-memaccess -Wno-error=implicit-fallthrough -no-pie -fPIC" .
 
 %install
-make install DESTDIR=%{buildroot}
+make -C redhat-linux-build install DESTDIR=%{buildroot}
 
 %check
 
