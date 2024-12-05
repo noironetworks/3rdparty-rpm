@@ -5,7 +5,7 @@
 %define version_py @VERSION_PY@
 %{!?upstream_version: %global upstream_version %{version}%{?milestone}}
 
-Name:           python-%{pypi_name}
+Name:           python3-%{pypi_name}
 Version:        @VERSION@
 Release:        @RELEASE@%{?dist}
 Summary:        API and implementations to support Service Function Chaining in Neutron
@@ -16,11 +16,11 @@ Source0:        https://tarballs.openstack.org/%{pypi_name}/%{pypi_name}-%{versi
 
 BuildArch:      noarch
 
-BuildRequires:  python2-devel
-BuildRequires:  python-setuptools
-BuildRequires:  python-pbr
-BuildRequires:  python-oslo-sphinx
-BuildRequires:  python-sphinx
+BuildRequires:  python3-devel
+BuildRequires:  python3-setuptools
+BuildRequires:  python3-pbr
+BuildRequires:  python3-oslo-sphinx
+BuildRequires:  python3-sphinx
 
 %description
 This project provides APIs and implementations to support Service Function
@@ -39,29 +39,29 @@ environment a series of network functions that would have traditionally been
 implemented as a collection of physical network devices connected in series by
 cables.
 
-%package -n python2-%{pypi_name}
+%package -n python3-%{pypi_name}
 Summary:        API and implementations to support Service Function Chaining in Neutron
-%{?python_provide:%python_provide python2-%{pypi_name}}
+%{?python3_provide:%python3_provide python3-%{pypi_name}}
 
-Requires:       python-alembic
-Requires:       python-eventlet
-Requires:       python-netaddr
-Requires:       python-neutron
-Requires:       python-neutron-lib
-Requires:       python-neutronclient
-Requires:       python-oslo-config
-Requires:       python-oslo-i18n
-Requires:       python-oslo-log
-Requires:       python-oslo-messaging
-Requires:       python-oslo-serialization
-Requires:       python-oslo-utils
-Requires:       python-six
-Requires:       python-sqlalchemy
-Requires:       python-stevedore
-# To remove when code has moved to python-openstackclient
-Requires:       python-openstackclient
+Requires:       python3-alembic
+Requires:       python3-eventlet
+Requires:       python3-netaddr
+Requires:       python3-neutron
+Requires:       python3-neutron-lib
+Requires:       python3-neutronclient
+Requires:       python3-oslo-config
+Requires:       python3-oslo-i18n
+Requires:       python3-oslo-log
+Requires:       python3-oslo-messaging
+Requires:       python3-oslo-serialization
+Requires:       python3-oslo-utils
+Requires:       python3-six
+Requires:       python3-sqlalchemy
+Requires:       python3-stevedore
+# To remove when code has moved to python3-openstackclient
+Requires:       python3-openstackclient
 
-%description -n python2-%{pypi_name}
+%description -n python3-%{pypi_name}
 This project provides APIs and implementations to support Service Function
 Chaining in Neutron.
 
@@ -90,23 +90,23 @@ rm -rf %{module}/tests/unit/cli
 
 %build
 export SKIP_PIP_INSTALL=1
-%{__python2} setup.py build
-%{__python2} setup.py build_sphinx
+%{__python3} setup.py build
+%{__python3} setup.py build_sphinx
 rm %{docpath}/.buildinfo
 
 
 %install
 export PBR_VERSION=%{version_py}
 export SKIP_PIP_INSTALL=1
-%{__python2} setup.py install --skip-build --root %{buildroot}
+%{__python3} setup.py install --skip-build --root %{buildroot}
 
 
-%files -n python2-%{pypi_name}
+%files -n python3-%{pypi_name}
 %license LICENSE
 %doc README.rst
-%{python2_sitelib}/%{module}
-%{python2_sitelib}/%{module}-*.egg-info
-%exclude %{python2_sitelib}/%{module}/tests
+%{python3_sitelib}/%{module}
+%{python3_sitelib}/%{module}-*.egg-info
+%exclude %{python3_sitelib}/%{module}/tests
 
 
 %changelog
